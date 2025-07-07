@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-import userModel from "./userModel.js";
+import userModel from "../models/userModel.js";
 const SECRET = "sometext";
 
 const register = async (req, res) => {
@@ -55,7 +55,6 @@ const showUsers = async (req, res) => {
   }
 };
 
-
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -81,4 +80,4 @@ const login = async (req, res) => {
     res.status(400).json({ message: "Something went wrong" });
   }
 };
-export {register,login,showUsers,userUpdate,userDelete}
+export { register, login, showUsers, userUpdate, userDelete };
