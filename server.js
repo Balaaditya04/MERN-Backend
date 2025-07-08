@@ -2,18 +2,23 @@ import mongoose from "mongoose";
 import express from "express";
 import dotenv from "dotenv";
 import userRouter from "./routes/userRoute.js";
+
 dotenv.config();
 
 const app = express();
-const dbuser = encodeURIComponent(process.env.DBUSER);
-const dbpass = encodeURIComponent(process.env.DBPASS);
 
-mongoose
-  .connect(`mongodb://${dbuser}:${dbpass}@localhost:27017/lpu?authsource=admin`)
-  .then(() => {
-    app.listen(8080, () => {
-      console.log("Server started");
-    });
-  });
+// Middlewares
 app.use(express.json());
 app.use("/api/users", userRouter);
+
+// MongoDB Connection (Cloud)
+mongoose
+  .connect("mongodb+srv://adityataninki:Bala%402004_@cluster0.5guch9n.mongodb.net/lpu?retryWrites=true&w=majority&appName=Cluster0")
+  .then(() => {
+    app.listen(8080, () => {
+      console.log("Server started on port 8080");
+    });
+  })
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+  });
