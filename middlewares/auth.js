@@ -1,26 +1,33 @@
 import jwt from "jsonwebtoken";
-const SECRET = "something";
-
+const SECRET = process.env.JWT_SECRET || "sometext";
 const authenticate = (req, res, next) => {
-  try {
+try {
     let token = req.headers.authorization;
+    if (!token) {
+        return res.status(401).json({ message: "Access Denied - No token provided" });
+    }
     token = token.split(" ")[1];
+    if (!token) {
+        return res.status(401).json({ message: "Access Denied - Invalid token format" });
+    }
     const user = jwt.verify(token, SECRET);
     req.role = user.role;
+    req.user = user;
     next();
-  } catch (err) {
-    return res.json({ message: "Access Denied" });
-  }
+} catch (err) {
+    console.log(err);
+    return res.status(401).json({ message: "Access Denied - Invalid token" });
+}
 };
 
 const authorize = (role) => {
-  return (req, res, next) => {
+return (req, res, next) => {
     if (req.role === role) {
-      next();
+    next();
     } else {
-      return res.json({ message: "Unauthorized Access" });
+    return res.json({ message: "Unauthorized access" });
     }
-  };
+};
 };
 
-export {authenticate,authorize}
+export { authenticate, authorize };
