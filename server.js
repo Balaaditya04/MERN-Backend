@@ -34,15 +34,6 @@ app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/orders", orderRouter);
 
-// Serve static files in production
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../MERN frontend/dist")));
-  
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../MERN frontend/dist/index.html"));
-  });
-}
-
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
